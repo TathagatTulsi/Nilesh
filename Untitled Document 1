@@ -1,52 +1,61 @@
-import React, { useState } from "react";
+import React, { Component } from "react";
 import "./App.css";
 
-const App = () => {
-  const [temperatureValue, setTemperatureValue] = useState(10);
-  const [temperatureColor, setTemperatureColor] = useState("cold");
-  
-  const increaseTemperature = () => {
+class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      temperatureValue: 10,
+      temperatureColor: "cold",
+    };
+  }
+
+  increaseTemperature = () => {
+    const { temperatureValue } = this.state;
     if (temperatureValue === 50) return;
 
     const newTemperature = temperatureValue + 1;
 
-    setTemperatureValue(newTemperature);
+    this.setState({ temperatureValue: newTemperature });
+
     if (newTemperature >= 20 && newTemperature < 35) {
-      setTemperatureColor("medium");
-    }
-    else if(newTemperature >= 35) {
-      setTemperatureColor("hot");
+      this.setState({ temperatureColor: "medium" });
+    } else if (newTemperature >= 35) {
+      this.setState({ temperatureColor: "hot" });
     }
   };
 
-  const decreaseTemperature = () => {
+  decreaseTemperature = () => {
+    const { temperatureValue } = this.state;
     if (temperatureValue === 0) return;
 
     const newTemperature = temperatureValue - 1;
-    setTemperatureValue(newTemperature);
+    this.setState({ temperatureValue: newTemperature });
+
     if (newTemperature < 20 && newTemperature < 35) {
-      setTemperatureColor("cold");
+      this.setState({ temperatureColor: "cold" });
+    } else if (newTemperature < 35) {
+      this.setState({ temperatureColor: "medium" });
     }
-    else if (newTemperature < 35) {
-      setTemperatureColor("medium");
-    }
-   
   };
 
-  return (
-    <div className="app-container">
-      <div className="temperature-display-container">
-        <div className={`temperature-display ${temperatureColor}`}>
-          {temperatureValue}°C
+  render() {
+    const { temperatureValue, temperatureColor } = this.state;
+
+    return (
+      <div className="app-container">
+        <div className="temperature-display-container">
+          <div className={`temperature-display ${temperatureColor}`}>
+            {temperatureValue}°C
+          </div>
+        </div>
+        <div className="button-container">
+          <button onMouseDown={this.increaseTemperature}>+</button>
+          <button onClick={this.decreaseTemperature}>-</button>
         </div>
       </div>
-      <div className="button-container">
-        <button onMouseDown={increaseTemperature}>+</button>
-        <button onClick={decreaseTemperature}>-</button>
-      </div>
-    </div>
-  );
-};
+    );
+  }
+}
 
 export default App;
-
